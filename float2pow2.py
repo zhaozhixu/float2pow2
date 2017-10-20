@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-# fuction float2fix_offline can (optionally) dump trainable variables
+# fuction float2pow2_offline can (optionally) dump trainable variables
 # to txt files and convert them from floats to nearest numbers that are the
 # sums of combinations of power of 2s.
 import os
@@ -51,10 +51,10 @@ def load_from_dir(sess, datadir):
 
     return tf.group(*fixed_ops)
 
-def float2fix_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False):
+def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False):
     if resave:
         save_data(sess, datadir)
     if recall:
         os.system("./scripts/restore.sh " + str(datadir))
-    os.system("./scripts/float2fix.sh -p 0 -b " + str(bitwidth) + " -r " + str(pow_low) + " " + str(pow_high) + " -f " + str(datadir) + "/*.txt")
+    os.system("./scripts/float2pow2.sh -p 0 -b " + str(bitwidth) + " -r " + str(pow_low) + " " + str(pow_high) + " -f " + str(datadir) + "/*.txt")
     return load_from_dir(sess, datadir)
