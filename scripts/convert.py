@@ -35,13 +35,13 @@ def fact(n, nitem):
 def powcomb_array(bitwidth, pow_low, pow_high):
     pow_width = pow_high - pow_low + 1
     pow_array = np.zeros((pow_width))
-    d1 = fact(pow_width, pow_width - bitwidth) / fact(pow_width - bitwidth, pow_width - bitwidth)
+    d1 = fact(pow_width, pow_width-bitwidth) / fact(pow_width-bitwidth, pow_width-bitwidth)
     d2 = bitwidth
     comb = np.zeros((d1, d2))
     index = np.zeros((d2), dtype = np.int)
 
     for i in range(pow_low, pow_high + 1):
-        pow_array[i] = 2 ** i
+        pow_array[i-pow_low] = 2 ** i
     for i in range(0, bitwidth):
         index[i] = i
         comb[0][i] = pow_array[index[i]]

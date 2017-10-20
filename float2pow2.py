@@ -42,7 +42,7 @@ def load_from_dir(sess, datadir):
             fstr = fo.read()
             # fix_op = x.assign(parse_tensor_str(fstr))
             # op = x.assign(tf.Variable(parse_tensor_str(fstr)))
-            op = tf.assign(x, tf.Variable(parse_tensor_str(fstr)))
+            op = tf.assign(x, tf.Variable(parse_tensor_str(fstr), dtype=tf.float32))
         except IOError:
             print ("No such file: " + filename)
             continue
@@ -51,10 +51,11 @@ def load_from_dir(sess, datadir):
 
     return tf.group(*fixed_ops)
 
-def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False):
+def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False, convert=False):
     if resave:
         save_data(sess, datadir)
     if recall:
         os.system("./scripts/restore.sh " + str(datadir))
-    os.system("./scripts/float2pow2.sh -p 0 -b " + str(bitwidth) + " -r " + str(pow_low) + " " + str(pow_high) + " -f " + str(datadir) + "/*.txt")
+    if convert:
+        os.system("./scripts/float2pow2.sh -p 0 -b " + str(bitwidth) + " -r " + str(pow_low) + " " + str(pow_high) + " -f " + str(datadir) + "/*.txt")
     return load_from_dir(sess, datadir)

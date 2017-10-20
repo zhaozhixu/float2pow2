@@ -4,11 +4,11 @@ if [ $# -eq 0 ]; then
     echo "usage: $0 [-h] -p <portion> -b <bitwidth> -r <pow_low> <pow_high> -f <files>"
     echo " "
     echo "options:"
-    echo "-h, --help						show this message"
-    echo "-p, --portion <portion>			portion to drop small data (in percentage 0~100)"
-    echo "-b, --bitwidth <bitwidth>			bitwidth"
+    echo "-h, --help				show this message"
+    echo "-p, --portion <portion>		portion to drop small data (in percentage 0~100)"
+    echo "-b, --bitwidth <bitwidth>		bitwidth"
     echo "-r, --range <pow_low> <pow_high>	low and high end of power"
-    echo "-f, --file <files>				files to process"
+    echo "-f, --file <files>			files to process"
     exit 0
 fi
 
@@ -23,11 +23,11 @@ while [ $# -gt 0 ]; do
             echo "usage: $0 [-h] -p <portion> -b <bitwidth> -r <pow_low> <pow_high> -f <files>"
             echo " "
             echo "options:"
-            echo "-h, --help						show this message"
-            echo "-p, --portion <portion>			portion to drop small data (in percentage 0~100)"
-            echo "-b, --bitwidth <bitwidth>			bitwidth"
+            echo "-h, --help				show this message"
+            echo "-p, --portion <portion>		portion to drop small data (in percentage 0~100)"
+            echo "-b, --bitwidth <bitwidth>		bitwidth"
             echo "-r, --range <pow_low> <pow_high>	low and high end of power"
-            echo "-f, --file <files>				files to process"
+            echo "-f, --file <files>			files to process"
             exit 0;;
         -p|--portion)
             portion=$2
