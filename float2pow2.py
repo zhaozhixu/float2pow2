@@ -3,6 +3,7 @@
 # fuction float2pow2_offline can (optionally) dump trainable variables
 # to txt files and convert them from floats to nearest numbers that are the
 # sums of combinations of power of 2s.
+# Author: Zhao Zhixu
 import os
 import re
 import numpy as np
@@ -28,10 +29,13 @@ def savetheta(file_name, variable):
 	file.close()
 	print(file_name + " has been saved")
 
-def save_data(sess, savedir):
+def save_data(sess, savedir, trt=False):
     for x in tf.trainable_variables():
         filename = savedir + '/' + re.sub(r'/', '_', x.op.name) + ':0.txt'
-        savetheta(filename, x.eval(session=sess))
+        x_save = x
+        if trt:
+            x_save = tf.transpose(x)
+        savetheta(filename, x_save.eval(session=sess))
 
 def load_from_dir(sess, datadir):
     fixed_ops = []
@@ -51,7 +55,7 @@ def load_from_dir(sess, datadir):
 
     return tf.group(*fixed_ops)
 
-def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False, convert=False):
+def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False, convert=False, trt=False):
     if resave:
         save_data(sess, datadir)
     if recall:
