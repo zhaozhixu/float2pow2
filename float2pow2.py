@@ -3,7 +3,7 @@
 # fuction float2pow2_offline can (optionally) dump trainable variables
 # to txt files and convert them from floats to nearest numbers that are the
 # sums of combinations of power of 2s.
-# Author: Zhao Zhixu
+# author: Zhao Zhixu
 import os
 import re
 import numpy as np
@@ -30,16 +30,31 @@ def savetheta(file_name, variable):
 	print(file_name + " has been saved")
 
 def save_data(sess, savedir, trt=False):
-    for x in tf.trainable_variables():
+    with tf.variable_scope("conv1", reuse=True):
+        x = tf.get_variable("kernels");
         filename = savedir + '/' + re.sub(r'/', '_', x.op.name) + ':0.txt'
         x_save = x
         if trt:
-            x_save = tf.transpose(x)
+            x_save = tf.transpose(x, [3, 2, 0 ,1])
+        savetheta(filename, x_save.eval(session=sess))
+        x = tf.get_variable("biases");
+        filename = savedir + '/' + re.sub(r'/', '_', x.op.name) + ':0.txt'
+        x_save = x
+        savetheta(filename, x_save.eval(session=sess))
+    for x in tf.trainable_variables():
+    # for x in tf.all_variables():
+        # print (x.op.name)
+        filename = savedir + '/' + re.sub(r'/', '_', x.op.name) + ':0.txt'
+        x_save = x
+        m = re.search(r'kernel', x.op.name)
+        if trt and m:
+            x_save = tf.transpose(x, [3, 2, 0 ,1])
         savetheta(filename, x_save.eval(session=sess))
 
 def load_from_dir(sess, datadir):
     fixed_ops = []
     for x in tf.trainable_variables():
+    # for x in tf.all_variables():
         filename = datadir + '/' + re.sub(r'/', '_', x.op.name) + ':0.txt'
         try:
             fo = open(filename)
@@ -57,7 +72,7 @@ def load_from_dir(sess, datadir):
 
 def float2pow2_offline(bitwidth, pow_low, pow_high, datadir, sess, resave=False, recall=False, convert=False, trt=False):
     if resave:
-        save_data(sess, datadir)
+        save_data(sess, datadir, trt)
     if recall:
         os.system("./scripts/restore.sh " + str(datadir))
     if convert:
